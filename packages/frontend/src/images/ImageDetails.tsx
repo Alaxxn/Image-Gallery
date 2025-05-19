@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { fetchDataFromServer } from "../MockAppData.ts";
+
 import { useParams } from 'react-router';
+import type { IImageData } from "../MockAppData.ts";
 
+interface ImageProp {
+    data: IImageData[];
+}
 
-
-export function ImageDetails() {
+export function ImageDetails(props : ImageProp) {
     //hook to get param details
     const {imageId} = useParams();
-    console.log(imageId);
-    
-    const [imageData, _setImageData] = useState(fetchDataFromServer);
+    const imageData = props.data;
     const image = imageData.find(image => image.id === imageId);
     if (!image) {
-        return <div className="container"><h2>Image not found</h2></div>;
+        return <h2>Image not found</h2>;
     }
 
     return (
