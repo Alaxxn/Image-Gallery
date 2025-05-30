@@ -8,9 +8,10 @@ import {ValidRoutes} from "./shared/ValidRoutes";
 dotenv.config(); // Read the .env file in the current working directory, and load values into process.env.
 const PORT = process.env.PORT || 3000;
 const STATIC_DIR = process.env.STATIC_DIR || "public";
+const resolvedStaticDir = path.resolve(process.cwd(), STATIC_DIR);
 
 const app = express();
-app.use(express.static(STATIC_DIR));
+app.use(express.static(resolvedStaticDir));
 
 
 app.get("/hello", (req: Request, res: Response) => {
