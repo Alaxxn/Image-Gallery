@@ -6,7 +6,7 @@ import { LoginPage } from "./LoginPage.tsx";
 import { Routes, Route } from "react-router";
 import { useState } from "react";
 import { fetchDataFromServer } from "./MockAppData.ts";
-import { ValidRoutes } from "../../backend/src/shared/ValidRoutes.ts";
+import { ValidRoutes } from "csc437-monorepo-backend/src/shared/ValidRoutes.ts";
 
 
 function App() {
