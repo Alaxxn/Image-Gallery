@@ -4,6 +4,8 @@ import type { IApiImageData } from "csc437-monorepo-backend/src/shared/ApiImageD
 
 interface ImageProp {
     data: IApiImageData[];
+    loading : boolean;
+    error : boolean;
 }
 
 export function ImageDetails(props : ImageProp) {
@@ -11,9 +13,11 @@ export function ImageDetails(props : ImageProp) {
     const {imageId} = useParams();
     const imageData = props.data;
     const image = imageData.find(image => image.id === imageId);
-    if (!image) {
-        return <h2>Image not found</h2>;
-    }
+    
+    if (!image) return <h2>Image not found</h2>;
+    if (props.loading) return <p>Loading images...</p>;
+    if (props.error) return <p>Failed to load images. Please try again later.</p>;
+
 
     return (
         <div className="container">
