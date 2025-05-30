@@ -6,10 +6,11 @@ import { LoginPage } from "./LoginPage.tsx";
 import { Routes, Route } from "react-router";
 import { useState, useEffect } from "react";
 import { ValidRoutes } from "csc437-monorepo-backend/src/shared/ValidRoutes.ts";
+import type { IApiImageData } from "csc437-monorepo-backend/src/shared/ApiImageData.ts";
 
 
 function App() {
-    const [imageData, _setImageData] = useState([]);
+    const [imageData, _setImageData] = useState<IApiImageData[]>([]);
     const [loading, _setLoading] = useState(true);
     const [error, _setError] = useState(false);
 
@@ -25,6 +26,7 @@ function App() {
         }
 
         const data = await response.json();
+        console.log(data);
         _setImageData(data);
         _setLoading(false);
       } catch (err) {
@@ -41,7 +43,8 @@ function App() {
     <Routes>
       <Route path={ValidRoutes.HOME} element={<MainLayout />} >
         <Route index element={<AllImages data={imageData} loading={loading} error={error}/>} />
-        <Route path={ValidRoutes.IMAGES} element={<ImageDetails data={imageData} loading={loading} error={error}/>} />
+        <Route path={ValidRoutes.IMAGES} 
+        element={<ImageDetails data={imageData} loading={loading} error={error} changeData={_setImageData}/>}/>
         <Route path={ValidRoutes.LOGIN} element={<LoginPage />} />
         <Route path={ValidRoutes.UPLOAD} element={<UploadPage />} />
       </Route> 

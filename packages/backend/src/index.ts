@@ -31,8 +31,15 @@ Object.values(ValidRoutes).forEach((route) => {
   });
 });
 
-app.get("/api/images", (req: Request, res: Response) => {
-    res.send(fetchDataFromServer());
+
+function waitDuration(numMs: number): Promise<void> {
+  console.log("waiting");
+  return new Promise(resolve => setTimeout(resolve, numMs));
+}
+
+app.get("/api/images", async (req: Request, res: Response) => {
+  await waitDuration(1000);
+  res.send(fetchDataFromServer());
 });
 
 app.listen(PORT, () => {
