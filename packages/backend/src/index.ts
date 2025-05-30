@@ -15,12 +15,13 @@ app.use(express.static(resolvedStaticDir));
 
 
 app.get("/hello", (req: Request, res: Response) => {
+    console.log("helloworld");
     res.send("Hello, World");
 });
 
 Object.values(ValidRoutes).forEach((route) => {
   app.get(route, (req, res, next) => {
-    res.sendFile(path.join(resolvedStaticDir, 'index.html'), (err) => {
+    res.sendFile(path.join(resolvedStaticDir, "index.html"), (err) => {
       if (err) {
         next(err);
       } else {
