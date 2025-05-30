@@ -20,7 +20,7 @@ app.get("/hello", (req: Request, res: Response) => {
 
 Object.values(ValidRoutes).forEach((route) => {
   app.get(route, (req, res, next) => {
-    res.sendFile(path.resolve(STATIC_DIR, 'index.html'), (err) => {
+    res.sendFile(path.join(resolvedStaticDir, 'index.html'), (err) => {
       if (err) {
         next(err);
       } else {
