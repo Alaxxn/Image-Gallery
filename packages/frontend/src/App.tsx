@@ -5,12 +5,11 @@ import { UploadPage } from "./UploadPage.tsx";
 import { LoginPage } from "./LoginPage.tsx";
 import { Routes, Route } from "react-router";
 import { useState } from "react";
-import { fetchDataFromServer } from "./MockAppData.ts";
 import { ValidRoutes } from "csc437-monorepo-backend/src/shared/ValidRoutes.ts";
 
 
 function App() {
-    const [imageData, _setImageData] = useState(fetchDataFromServer);
+    const [imageData, _setImageData] = useState([]);
     
     return (
     <Routes>

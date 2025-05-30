@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
-import {ValidRoutes} from "./shared/ValidRoutes";
+import { ValidRoutes } from "./shared/ValidRoutes";
+import { fetchDataFromServer } from "./shared/ApiImageData";
 
 
-
-dotenv.config(); // Read the .env file in the current working directory, and load values into process.env.
+dotenv.config();
 const PORT = process.env.PORT || 3000;
 const STATIC_DIR = process.env.STATIC_DIR || "public";
 const resolvedStaticDir = path.resolve(process.cwd(), STATIC_DIR);
@@ -14,7 +14,7 @@ const app = express();
 app.use(express.static(resolvedStaticDir));
 
 
-app.get("/hello", (req: Request, res: Response) => {
+app.get("/api/hello", (req: Request, res: Response) => {
     console.log("helloworld");
     res.send("Hello, World");
 });
@@ -29,6 +29,10 @@ Object.values(ValidRoutes).forEach((route) => {
       }
     });
   });
+});
+
+app.get("/api/images", (req: Request, res: Response) => {
+    res.send(fetchDataFromServer());
 });
 
 app.listen(PORT, () => {

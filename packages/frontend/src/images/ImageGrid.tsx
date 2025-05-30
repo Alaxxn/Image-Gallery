@@ -1,8 +1,8 @@
-import type { IImageData } from "../MockAppData.ts";
+import type { IApiImageData } from "csc437-monorepo-backend/src/shared/ApiImageData.ts";
 import "./Images.css";
 
 interface IImageGridProps {
-    images: IImageData[];
+    images: IApiImageData[];
 }
 
 export function ImageGrid(props: IImageGridProps) {

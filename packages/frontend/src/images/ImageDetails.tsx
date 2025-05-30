@@ -1,9 +1,9 @@
 
 import { useParams } from 'react-router';
-import type { IImageData } from "../MockAppData.ts";
+import type { IApiImageData } from "csc437-monorepo-backend/src/shared/ApiImageData.ts";
 
 interface ImageProp {
-    data: IImageData[];
+    data: IApiImageData[];
 }
 
 export function ImageDetails(props : ImageProp) {
