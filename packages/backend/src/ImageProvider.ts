@@ -1,0 +1,53 @@
+import { MongoClient , ObjectId, Collection } from "mongodb";
+
+interface IImageDocument {
+  _id: ObjectId;
+  src: string;
+  name: string;
+  authorId: ObjectId;
+  author: {
+    _id: string;
+    username: string;
+    email: string;
+    // other author fields
+  };
+}
+
+export class ImageProvider {
+    private collection: Collection<IImageDocument>
+
+    constructor(private readonly mongoClient: MongoClient) {
+        const collectionName = process.env.IMAGES_COLLECTION_NAME;
+        if (!collectionName) {
+            throw new Error("Missing IMAGES_COLLECTION_NAME from environment variables");
+        }
+        this.collection = this.mongoClient.db().collection(collectionName);
+    }
+
+    getAllImages() {
+  return this.collection.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "authorId",
+        foreignField: "_id",
+        as: "author"
+      }
+    },
+    {
+      $unwind: "$author"
+    },
+    {
+      $project: {
+        id: { $toString: "$_id" },
+        src: 1,
+        name: 1,
+        author: {
+          id: { $toString: "$author._id" },
+          username: "$author.username"
+        }
+      }
+    }
+  ]).toArray();
+}
+}
