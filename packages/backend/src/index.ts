@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { ValidRoutes } from "./shared/ValidRoutes";
-import { fetchDataFromServer } from "./shared/ApiImageData";
 import {connectMongo} from "./connectMongo";
 import { ImageProvider } from "./ImageProvider";
+import { registerImageRoutes } from "./routes/imageRoutes";
 
 
 dotenv.config();
@@ -36,20 +36,7 @@ Object.values(ValidRoutes).forEach((route) => {
   });
 });
 
-function waitDuration(numMs: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, numMs));
-}
-
-app.get("/api/images", async (req: Request, res: Response) => {
-  try {
-    await waitDuration(1000);
-    const images = await imageProvider.getAllImages();
-    res.json(images);
-  } catch (err) {
-    console.error("Error fetching images", err);
-    res.status(500).send("Internal Server Error");
-  }
-});
+registerImageRoutes(app, imageProvider);
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
