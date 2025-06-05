@@ -8,3 +8,6 @@ Content-Type: application/json # Content-Type header is a must if you're sending
 # Request body separated from headers by newline
 
 { "a": 1, "b": 2 }
+
+### Search for images by name substring
+GET http://localhost:3000/api/images/search?name=cat

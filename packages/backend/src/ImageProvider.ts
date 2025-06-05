@@ -24,30 +24,40 @@ export class ImageProvider {
         this.collection = this.mongoClient.db().collection(collectionName);
     }
 
-    getAllImages() {
-  return this.collection.aggregate([
-    {
-      $lookup: {
-        from: "users",
-        localField: "authorId",
-        foreignField: "_id",
-        as: "author"
+    async getAllImages(name?: string) {
+      const pipeline: any[] = [];
+
+      if (name) {
+        pipeline.push({
+          $match: {
+            name: { $regex: name, $options: "i" } // case-insensitive partial match
+          }
+        });
       }
-    },
-    {
-      $unwind: "$author"
-    },
-    {
-      $project: {
-        id: { $toString: "$_id" },
-        src: 1,
-        name: 1,
-        author: {
-          id: { $toString: "$author._id" },
-          username: "$author.username"
+      pipeline.push(
+        {
+          $lookup: {
+            from: "users",
+            localField: "authorId",
+            foreignField: "_id",
+            as: "author"
+          }
+        },
+        {
+          $unwind: "$author"
+        },
+        {
+          $project: {
+            id: { $toString: "$_id" },
+            src: 1,
+            name: 1,
+            author: {
+              id: { $toString: "$author._id" },
+              username: "$author.username"
+            }
+          }
         }
-      }
+      );
+      return this.collection.aggregate(pipeline).toArray();
     }
-  ]).toArray();
-}
 }
