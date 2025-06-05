@@ -21,8 +21,8 @@ export function ImageNameEditor(props: INameEditorProps) {
         const data = await response.json();
         console.log(data);
         data.forEach((image : IApiImageData) => {
-            if((image.id === props.ImgId) && (image.author.username === props.initialValue)){
-                image.author.username = input;
+            if((image.id === props.ImgId)){
+                image.name = input;
             }
         });
         _setLoading(false);

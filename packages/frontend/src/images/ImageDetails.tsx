@@ -26,7 +26,7 @@ export function ImageDetails(props : ImageProp) {
         <div className="container">
             <h2>{image.name}</h2>
             <p>By {image.author.username}</p>
-            <ImageNameEditor ImgId={imageId} initialValue={image.author.username} changeData={props.changeData}/> 
+            <ImageNameEditor ImgId={imageId} initialValue={image.name} changeData={props.changeData}/> 
             <img className="ImageDetails-img" src={image.src} alt={image.name} />
         </div>
     )
