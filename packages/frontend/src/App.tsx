@@ -4,7 +4,7 @@ import { MainLayout } from "./MainLayout.tsx";
 import { UploadPage } from "./UploadPage.tsx";
 import { LoginPage } from "./LoginPage.tsx";
 import { Routes, Route } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ValidRoutes } from "csc437-monorepo-backend/src/shared/ValidRoutes.ts";
 import type { IApiImageData } from "csc437-monorepo-backend/src/shared/ApiImageData.ts";
 import {ImageSearchForm} from "./images/ImageSearchForm.tsx";
@@ -15,24 +15,33 @@ function App() {
     const [loading, _setLoading] = useState(true);
     const [searchTerm, _setSearchTerm] = useState("");
     const [error, _setError] = useState(false);
+    const ref = useRef(0);
 
     const fetchImages = async () => {
+      const requestNum = ref.current + 1;
       try {
         const endpoint = `http://localhost:3000/api/images/search?name=${searchTerm}`
         const response = await fetch(endpoint);
         if (!response.ok) {
           console.log("Error status:", response.status);
+          if (requestNum === ref.current){
           _setError(true);
           _setLoading(false);
+          }
           return;
         }
-        const data = await response.json();
-        _setImageData(data);
-        _setLoading(false);
+        if (requestNum === ref.current){
+          const data = await response.json();
+          _setImageData(data);
+          _setLoading(false);
+        }
+
       } catch (err) {
         console.error("Fetch failed:", err);
+        if (requestNum === ref.current){
         _setError(true);
         _setLoading(false);
+        }
       }
     };
 

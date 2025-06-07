@@ -5,7 +5,8 @@ import { ImageProvider } from "../ImageProvider";
 export function registerImageRoutes(app: express.Application, imageProvider: ImageProvider) {
 
     function waitDuration(numMs: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, numMs));
+        console.log(numMs)
+        return new Promise(resolve => setTimeout(resolve, Math.random() * 5000));
     }
 
     app.use(express.json());
