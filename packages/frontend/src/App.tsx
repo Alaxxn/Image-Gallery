@@ -18,7 +18,8 @@ function App() {
     const ref = useRef(0);
 
     const fetchImages = async () => {
-      const requestNum = ref.current + 1;
+      ref.current += 1;
+      const requestNum = ref.current;
       try {
         const endpoint = `http://localhost:3000/api/images/search?name=${searchTerm}`
         const response = await fetch(endpoint);
