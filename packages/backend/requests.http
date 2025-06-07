@@ -17,7 +17,7 @@ GET http://localhost:3000/api/images/search?name=cat
 PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3/name
 Content-Type: application/json
 
-{ "name": "Cat" }
+{ "name": "cat" }
 
 ### Name Error
 PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3/name

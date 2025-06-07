@@ -37,7 +37,7 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
         const imageId = req.params.id;
         const newName = req.body.name;
         const MAX_NAME_LENGTH = 100;
-
+        console.log("changing name");
         // input validation
         if (!newName || typeof newName !== "string") {
             res.status(400).send({
@@ -45,17 +45,18 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
                 message: "Name must be a string"
             });
         }
-        if (newName.length > MAX_NAME_LENGTH){
+        else if (newName.length > MAX_NAME_LENGTH){
             res.status(422).send({
                 error: "Unprocessable Entity",
                 message: `Image name exceeds ${MAX_NAME_LENGTH} characters`
             });
         }
-
+        else{
         try {
             const changed = await imageProvider.updateImageName(imageId, newName);
 
             if (changed === 1) {
+                console.log("name changed");
                 res.status(200).send();
             } else {
                 res.status(404).send({
@@ -66,6 +67,7 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
         } catch (err) {
             console.error("Failed to update image name:", err);
             res.status(500).json({ error: "Internal server error." });
+        }
         }
     });
     

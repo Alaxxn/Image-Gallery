@@ -17,18 +17,33 @@ export function ImageNameEditor(props: INameEditorProps) {
     async function handleSubmitPressed() {
         setIsButtonDisabled(true);
         _setLoading(true);
-        const response = await fetch("/api/images");
-        const data = await response.json();
-        console.log(data);
-        data.forEach((image : IApiImageData) => {
-            if((image.id === props.ImgId)){
-                image.name = input;
+
+        try {
+            const endpoint = `/api/images/${props.ImgId}/name`;
+            const response = await fetch(endpoint, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: input }),
+            });
+
+            if (response.ok) {
+                props.changeData((prevData: IApiImageData[]) =>
+                    prevData.map((img) =>
+                    img.id === props.ImgId ? { ...img, name: input } : img
+                ));
+            } else {
+                const error = await response.json();
+                console.error("Failed to update image name:", error.error || error);
+                alert("Could not update image name.");
             }
-        });
+        } catch (err) {
+            console.error("Network error:", err);
+            alert("Network error occurred.");
+        }
+
         _setLoading(false);
         setIsEditingName(false);
         setIsButtonDisabled(false);
-        props.changeData(data);
     }
 
     if (isEditingName) {
