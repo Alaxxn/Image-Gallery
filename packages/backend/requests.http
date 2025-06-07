@@ -14,7 +14,19 @@ GET http://localhost:3000/api/images/search?name=cat
 
 
 ### Update Authors name
-PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3
+PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3/name
 Content-Type: application/json
 
-{ "name": "Alaxxn" }
+{ "name": "Cat" }
+
+### Name Error
+PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3/name
+Content-Type: application/json
+
+{ "name": "sdkfj;asadfafsdfadfjasdfafk;lsaadsfdsdfafdfj;klsdajf;lksadjfklsdafjlksadjf;lsajf;lsadjflsajdf;lkjsad;;d" }
+
+### Input Error
+PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3/name
+Content-Type: application/json
+
+{ "name": "" }

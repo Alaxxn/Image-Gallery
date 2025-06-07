@@ -1,12 +1,15 @@
 import express, { Request, Response } from "express";
 import { ImageProvider } from "../ImageProvider";
 
+
 export function registerImageRoutes(app: express.Application, imageProvider: ImageProvider) {
 
     function waitDuration(numMs: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, numMs));
     }
 
+    app.use(express.json());
+    
     app.get("/api/images", async (req: Request, res: Response) => {
         try {
             await waitDuration(1000);
@@ -29,5 +32,42 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
             res.status(500).send("Internal Server Error");
         }
     });
+
+    app.patch("/api/images/:id/name", async (req: Request, res: Response) => {
+        const imageId = req.params.id;
+        const newName = req.body.name;
+        const MAX_NAME_LENGTH = 100;
+
+        // input validation
+        if (!newName || typeof newName !== "string") {
+            res.status(400).send({
+                error: "Bad Request",
+                message: "Name must be a string"
+            });
+        }
+        if (newName.length > MAX_NAME_LENGTH){
+            res.status(422).send({
+                error: "Unprocessable Entity",
+                message: `Image name exceeds ${MAX_NAME_LENGTH} characters`
+            });
+        }
+
+        try {
+            const changed = await imageProvider.updateImageName(imageId, newName);
+
+            if (changed === 1) {
+                res.status(200).send();
+            } else {
+                res.status(404).send({
+                    error: "Not Found",
+                    message: "Image does not exist"
+                });
+            }
+        } catch (err) {
+            console.error("Failed to update image name:", err);
+            res.status(500).json({ error: "Internal server error." });
+        }
+    });
+    
 
 }

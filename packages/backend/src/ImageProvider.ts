@@ -24,6 +24,22 @@ export class ImageProvider {
         this.collection = this.mongoClient.db().collection(collectionName);
     }
 
+
+    async updateImageName(imageId: string, newName: string): Promise<number> {
+
+      if (!ObjectId.isValid(imageId)) {
+        throw new Error("Invalid image ID format.");
+      }
+
+      const result = await this.collection.updateOne(
+        { _id: new ObjectId(imageId) },   // Filter: match by ObjectId
+        { $set: { name: newName } }       // Update: set new name
+      );
+
+      return result.modifiedCount;
+    }
+
+
     async getAllImages(name?: string) {
       const pipeline: any[] = [];
 
