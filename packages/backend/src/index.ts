@@ -7,6 +7,7 @@ import { ImageProvider } from "./ImageProvider";
 import { CredentialsProvider } from "./CredentialsProvider";
 import { registerImageRoutes } from "./routes/imageRoutes";
 import { registerAuthRoutes } from "./routes/authRoutes";
+import { verifyAuthToken } from "./shared/verifyAuthToken";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -39,6 +40,7 @@ Object.values(ValidRoutes).forEach((route) => {
   });
 });
 
+app.use("/api/*", verifyAuthToken);
 registerImageRoutes(app, imageProvider);
 registerAuthRoutes(app, credentialsProvider);
 
