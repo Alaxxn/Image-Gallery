@@ -63,8 +63,8 @@ export function registerAuthRoutes(app: express.Application, credentialsProvider
             });
         }else {
             const success = await credentialsProvider.verifyPassword(username, password);
-            const response = await generateAuthToken(username, app.locals.JWT_SECRET)
             if (success){
+                const response = await generateAuthToken(username, app.locals.JWT_SECRET);
                 res.status(200).send(response);
             }else{
                 res.status(401).send({

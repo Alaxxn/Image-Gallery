@@ -14,6 +14,7 @@ function App() {
     const [imageData, _setImageData] = useState<IApiImageData[]>([]);
     const [loading, _setLoading] = useState(true);
     const [searchTerm, _setSearchTerm] = useState("");
+    const [AuthToken, _setAuthToken] = useState("");
     const [error, _setError] = useState(false);
     const ref = useRef(0);
 
@@ -53,6 +54,7 @@ function App() {
   function handleImageSearch() {
     fetchImages();
   }
+  console.log(AuthToken);
     
   return (
     <Routes>
@@ -70,8 +72,19 @@ function App() {
               />} 
           />}/>
         <Route path={ValidRoutes.IMAGES} 
-        element={<ImageDetails data={imageData} loading={loading} error={error} changeData={_setImageData}/>}/>
-        <Route path={ValidRoutes.LOGIN} element={<LoginPage />} />
+          element={<ImageDetails 
+              data={imageData} 
+              loading={loading} 
+              error={error} 
+              changeData= {_setImageData}/>}/>
+        <Route path={ValidRoutes.LOGIN} 
+              element={<LoginPage 
+              isRegistering={false} 
+              UpdateToken = {_setAuthToken}/>} />
+        <Route path={ValidRoutes.REGISTER} 
+              element={<LoginPage 
+              isRegistering={true}
+              UpdateToken = {_setAuthToken}/>} />
         <Route path={ValidRoutes.UPLOAD} element={<UploadPage />} />
       </Route> 
     </Routes>
