@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { ValidRoutes } from "csc437-monorepo-backend/src/shared/ValidRoutes.ts";
 import type { IApiImageData } from "csc437-monorepo-backend/src/shared/ApiImageData.ts";
 import {ImageSearchForm} from "./images/ImageSearchForm.tsx";
+import { ProtectedRoute } from "./ProtectedRoute.tsx";
 
 
 function App() {
@@ -58,8 +59,8 @@ function App() {
     
   return (
     <Routes>
-      <Route path={ValidRoutes.HOME} element={<MainLayout />} >
-        <Route index element={
+      <Route path={ValidRoutes.HOME} element={ <MainLayout />} >
+        <Route index element={ <ProtectedRoute authToken={AuthToken} > 
           <AllImages 
             data={imageData} 
             loading={loading} 
@@ -67,16 +68,15 @@ function App() {
             searchPanel= {<ImageSearchForm 
                   searchString = {searchTerm}
                   onSearchStringChange = {_setSearchTerm}
-                  onSearchRequested = {handleImageSearch}
-            
-              />} 
-          />}/>
+                  onSearchRequested = {handleImageSearch}/>} 
+          /> </ProtectedRoute> }/>
         <Route path={ValidRoutes.IMAGES} 
-          element={<ImageDetails 
+          element={ <ProtectedRoute authToken={AuthToken} > 
+          <ImageDetails 
               data={imageData} 
               loading={loading} 
               error={error} 
-              changeData= {_setImageData}/>}/>
+              changeData= {_setImageData}/> </ProtectedRoute>}/>
         <Route path={ValidRoutes.LOGIN} 
               element={<LoginPage 
               isRegistering={false} 
@@ -85,7 +85,9 @@ function App() {
               element={<LoginPage 
               isRegistering={true}
               UpdateToken = {_setAuthToken}/>} />
-        <Route path={ValidRoutes.UPLOAD} element={<UploadPage />} />
+        <Route path={ValidRoutes.UPLOAD} element={ 
+          <ProtectedRoute authToken={AuthToken} > 
+          <UploadPage /> </ProtectedRoute>} />
       </Route> 
     </Routes>
 

@@ -27,17 +27,18 @@ export function LoginPage(props: LoginProp) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-    const data = await response.json();
+    const token = await response.text();
     if (response.ok) {
-      return {
-        error: false,
-        message: `Successfully registered ${username}`,
+        props.UpdateToken(token);
+        navigate("/");
+        return {
+            error: false,
+            message: `Successfully registered ${username}`,
       };
     } else {
-      const msg = data?.message || "Registration failed.";
       return {
         error: true,
-        message: msg,
+        message: "Register failed. Please check your credentials.",
       };
     }
   }

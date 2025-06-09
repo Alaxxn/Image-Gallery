@@ -45,9 +45,8 @@ export function registerAuthRoutes(app: express.Application, credentialsProvider
                     message: "Username already taken"
                 });
             }else{
-                res.status(200).send({
-                message: "success!"
-            });
+                const response = await generateAuthToken(username, app.locals.JWT_SECRET);
+                res.status(200).send(response);
             }
         }
     });
