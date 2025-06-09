@@ -1,17 +1,8 @@
 ### Get all images
-# This is a comment
 GET http://localhost:3000/api/images
-
-### A second example.  Each request must be delimited by a triple hash
-POST http://localhost:3000/api/test
-Content-Type: application/json # Content-Type header is a must if you're sending JSON
-# Request body separated from headers by newline
-
-{ "a": 1, "b": 2 }
 
 ### Search for images by name substring
 GET http://localhost:3000/api/images/search?name=cat
-
 
 ### Update Authors name
 PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3/name
@@ -30,3 +21,21 @@ PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea3/name
 Content-Type: application/json
 
 { "name": "" }
+
+### Username already taken
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "Alaxxn1", "password": "SuperSafePassword1" }
+
+### Bad request
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "", "password": "SuperSafePassword1" }
+
+### Good Request (update username/passwords)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "newUser", "password": "Password" }
