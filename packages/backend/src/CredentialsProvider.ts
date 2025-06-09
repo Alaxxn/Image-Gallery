@@ -36,8 +36,17 @@ export class CredentialsProvider {
         return true;
     }
 
-    async verifyPassword(username: string, plaintextPassword: string) {
-        // TODO
-        return false;
+    async verifyPassword(username: string, plaintextPassword: string): Promise<boolean> {
+        const user = await this.collection.findOne({ username: username });
+        
+        if (!user) {
+            return false; // User not found
+        }
+
+        const hashedPassword = user.password;
+        const isMatch = await bcrypt.compare(plaintextPassword, hashedPassword);
+
+        return isMatch;
     }
+    
 }

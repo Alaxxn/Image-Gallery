@@ -8,9 +8,6 @@ import { CredentialsProvider } from "./CredentialsProvider";
 import { registerImageRoutes } from "./routes/imageRoutes";
 import { registerAuthRoutes } from "./routes/authRoutes";
 
-
-
-
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const STATIC_DIR = process.env.STATIC_DIR || "public";
@@ -19,6 +16,7 @@ const mongoClient = connectMongo();
 const imageProvider = new ImageProvider(mongoClient);
 const credentialsProvider = new CredentialsProvider(mongoClient);
 const app = express();
+app.locals.JWT_SECRET = process.env.JWT_SECRET
 
 
 
