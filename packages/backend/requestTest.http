@@ -2,7 +2,7 @@
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
-{ "username": "newUser", "password": "Password" }
+{ "username": "chunkylover23", "password": "Password" }
 
 ### Bad request
 POST http://localhost:3000/auth/login
@@ -21,3 +21,21 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 { "username": "Alaxxn", "password": "asdfad" }
+
+
+### Invalid JSWT
+PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea1/name
+Authorization: Bearer eyJhbGciOXVCJ9.eyJ1c2VybmFtZSI6ImNodW5reWxvdmVyMjMiLCJpYXQiOjE3NDk0ODg1NTYsImV4cCI6MTc0OTU3NDk1Nn0.7zZww0O095o47GGuBM5npekUXWIexmJlR0Qx8QdvgEE
+Content-Type: application/json
+
+{ "name": "cat" }
+
+
+### Update Image Name name
+PATCH http://localhost:3000/api/images/683a2facada706245d5e2ea1/name
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNodW5reWxvdmVyMjMiLCJpYXQiOjE3NDk0ODg1NTYsImV4cCI6MTc0OTU3NDk1Nn0.7zZww0O095o47GGuBM5npekUXWIexmJlR0Qx8QdvgEE
+Content-Type: application/json
+
+{ "name": "Pero" }
+
+

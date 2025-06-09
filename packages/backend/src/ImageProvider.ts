@@ -23,7 +23,39 @@ export class ImageProvider {
         }
         this.collection = this.mongoClient.db().collection(collectionName);
     }
+    
+    async getImageById(imageId: string) {
+      if (!ObjectId.isValid(imageId)) {
+        throw new Error("Invalid image ID format.");
+      }
 
+      const pipeline = [
+        { $match: { _id: new ObjectId(imageId) } },
+        {
+            $lookup: {
+                from: "users",
+                localField: "authorId",
+                foreignField: "_id",
+                as: "author"
+            }
+        },
+        { $unwind: "$author" },
+        {
+            $project: {
+                id: { $toString: "$_id" },
+                name: 1,
+                src: 1,
+                author: {
+                    id: { $toString: "$author._id" },
+                    username: "$author.username"
+                }
+            }
+        }
+    ];
+
+      const results = await this.collection.aggregate(pipeline).toArray();
+      return results[0] || null;
+    }
 
     async updateImageName(imageId: string, newName: string): Promise<number> {
 
