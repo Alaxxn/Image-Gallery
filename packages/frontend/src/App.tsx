@@ -4,7 +4,7 @@ import { MainLayout } from "./MainLayout.tsx";
 import { UploadPage } from "./UploadPage.tsx";
 import { LoginPage } from "./LoginPage.tsx";
 import { Routes, Route } from "react-router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ValidRoutes } from "csc437-monorepo-backend/src/shared/ValidRoutes.ts";
 import type { IApiImageData } from "csc437-monorepo-backend/src/shared/ApiImageData.ts";
 import {ImageSearchForm} from "./images/ImageSearchForm.tsx";
@@ -24,19 +24,23 @@ function App() {
       const requestNum = ref.current;
       try {
         const endpoint = `http://localhost:3000/api/images/search?name=${searchTerm}`
-        const response = await fetch(endpoint);
+        const response = await fetch(endpoint, {
+          method: 'GET', // Or the appropriate HTTP method (POST, PUT, etc.)
+            headers: { 'Authorization': `Bearer ${AuthToken}`}
+        });
+        console.log(`fetching data with token=${AuthToken}`);
         if (!response.ok) {
           console.log("Error status:", response.status);
           if (requestNum === ref.current){
           _setError(true);
           _setLoading(false);
           }
-          return;
-        }
-        if (requestNum === ref.current){
+        }else if (requestNum === ref.current){
           const data = await response.json();
           _setImageData(data);
           _setLoading(false);
+        }else{
+
         }
 
       } catch (err) {
@@ -48,19 +52,21 @@ function App() {
       }
     };
 
-  useEffect(() => {
-    fetchImages();
-  }, []);
-
   function handleImageSearch() {
     fetchImages();
   }
-  console.log(AuthToken);
-    
+
+  useEffect(() => {
+    if (AuthToken) {
+      fetchImages();
+    }
+  }, [AuthToken]);
+      
   return (
     <Routes>
       <Route path={ValidRoutes.HOME} element={ <MainLayout />} >
-        <Route index element={ <ProtectedRoute authToken={AuthToken} > 
+        <Route index element={ 
+          <ProtectedRoute authToken={AuthToken} > 
           <AllImages 
             data={imageData} 
             loading={loading} 
@@ -71,12 +77,14 @@ function App() {
                   onSearchRequested = {handleImageSearch}/>} 
           /> </ProtectedRoute> }/>
         <Route path={ValidRoutes.IMAGES} 
-          element={ <ProtectedRoute authToken={AuthToken} > 
+          element={
+          <ProtectedRoute authToken={AuthToken}>
           <ImageDetails 
               data={imageData} 
               loading={loading} 
               error={error} 
-              changeData= {_setImageData}/> </ProtectedRoute>}/>
+              changeData= {_setImageData}/>
+          </ProtectedRoute> }/>
         <Route path={ValidRoutes.LOGIN} 
               element={<LoginPage 
               isRegistering={false} 
@@ -93,7 +101,5 @@ function App() {
 
     );
 }
-
-
 
 export default App;

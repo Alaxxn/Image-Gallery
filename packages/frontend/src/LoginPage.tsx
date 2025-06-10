@@ -28,6 +28,7 @@ export function LoginPage(props: LoginProp) {
       body: JSON.stringify({ username, password }),
     });
     const token = await response.text();
+    console.log(`updatated token to=${token}`);
     if (response.ok) {
         props.UpdateToken(token);
         navigate("/");
@@ -56,6 +57,7 @@ export function LoginPage(props: LoginProp) {
 
     if (response.ok) {
       const token = await response.text();
+      console.log(`updatated token to=${token}`);
       props.UpdateToken(token);
       navigate("/");
       return {
@@ -73,16 +75,13 @@ export function LoginPage(props: LoginProp) {
   const [result, submitAction, isPending] = useActionState(
     async (_prev: unknown, formData: FormData): Promise<ActionResult> => {
       const username = formData.get("username") as string;
-      const password = formData.get("password") as string;
-
-      try {
+      const password = formData.get("password") as string;      try {
         if (props.isRegistering) {
           return handleRegister(username, password);
         } else {
           return handleLogin(username, password);
         }
       } catch (err) {
-        console.error("Network error:", err);
         return {
           error: true,
           message: "Network error. Please try again later.",
