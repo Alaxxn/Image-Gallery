@@ -23,7 +23,7 @@ function App() {
       ref.current += 1;
       const requestNum = ref.current;
       try {
-        const endpoint = `http://localhost:3000/api/images/search?name=${searchTerm}`
+        const endpoint = `/api/images/search?name=${searchTerm}`
         const response = await fetch(endpoint, {
           method: 'GET', // Or the appropriate HTTP method (POST, PUT, etc.)
             headers: { 'Authorization': `Bearer ${AuthToken}`}
