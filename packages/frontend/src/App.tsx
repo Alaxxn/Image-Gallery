@@ -94,8 +94,10 @@ function App() {
               isRegistering={true}
               UpdateToken = {_setAuthToken}/>} />
         <Route path={ValidRoutes.UPLOAD} element={ 
-          <ProtectedRoute authToken={AuthToken} > 
-          <UploadPage /> </ProtectedRoute>} />
+          //<ProtectedRoute authToken={AuthToken} > 
+          <UploadPage /> 
+          //</Route></ProtectedRoute>
+          }/>
       </Route> 
     </Routes>
 
